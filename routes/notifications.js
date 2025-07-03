@@ -50,7 +50,6 @@ router.post("/send-notification", validateToken, async (req, res) => {
         res.json({
             status: "success",
             fcmResponse: result,
-            messageId: response.responses[0]?.messageId, // Ambil messageId pertama
         });
     } catch (error) {
         console.error("FCM Error:", error);
