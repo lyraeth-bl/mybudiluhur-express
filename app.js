@@ -5,6 +5,7 @@ var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 var cors = require("cors");
 var { validateToken } = require("./lib/middleware/middleware");
+require("dotenv").config();
 
 var notificationsRouter = require("./routes/notifications");
 
