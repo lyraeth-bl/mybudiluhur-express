@@ -1,13 +1,12 @@
 var express = require("express");
 var router = express.Router();
 const admin = require("../lib/firebase/firebase");
+var { validateToken } = require("../lib/middleware/middleware");
 
-router.get("/", async (req, res) => {
-    res.render("index", { title: "Notifications" });
-});
+router.get("/", (req, res) => res.send("Notifications"));
 
 // Post notifications for multi nis
-router.post("/send-notification", async (req, res) => {
+router.post("/send-notification", validateToken, async (req, res) => {
     // Body
     const { title, body, data, targetNis } = req.body;
 
