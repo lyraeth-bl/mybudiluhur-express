@@ -6,8 +6,6 @@ var logger = require("morgan");
 var cors = require("cors");
 var { validateToken } = require("./lib/middleware/middleware");
 
-var indexRouter = require("./routes/index");
-var deviceTokensRouter = require("./routes/device_tokens");
 var notificationsRouter = require("./routes/notifications");
 
 var app = express();
@@ -23,8 +21,6 @@ app.use(cookieParser());
 app.use(cors());
 app.use(express.static(path.join(__dirname, "public")));
 
-app.use("/", indexRouter);
-app.use("/devicetokens", validateToken, deviceTokensRouter);
 app.use("/notifications", validateToken, notificationsRouter);
 
 // catch 404 and forward to error handler
