@@ -2,6 +2,10 @@ var express = require("express");
 var router = express.Router();
 const admin = require("../lib/firebase/firebase");
 
+router.get("/", async (req, res) => {
+    res.render("index", { title: "Notifications" });
+});
+
 // Post notifications for multi nis
 router.post("/send-notification", async (req, res) => {
     // Body

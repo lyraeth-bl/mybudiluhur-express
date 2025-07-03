@@ -4,11 +4,11 @@ var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 var cors = require("cors");
-var { validateToken } = require("./lib/middleware/middleware");
+var { validateToken } = require("../lib/middleware/middleware");
 require("dotenv").config();
 
-var indexRouter = require("./routes/index");
-var notificationsRouter = require("./routes/notifications");
+var indexRouter = require("../routes/index");
+var notificationsRouter = require("../routes/notifications");
 
 var app = express();
 
@@ -23,7 +23,7 @@ app.use(cookieParser());
 app.use(cors());
 app.use(express.static(path.join(__dirname, "public")));
 
-app.use("/", indexRouter);
+app.get("/", (req, res) => res.send("Express on Vercel"));
 app.use("/notifications", validateToken, notificationsRouter);
 
 // catch 404 and forward to error handler
