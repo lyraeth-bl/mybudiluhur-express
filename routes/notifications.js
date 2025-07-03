@@ -8,25 +8,34 @@ router.get("/", (req, res) => res.send("Notifications"));
 // Post notifications for multi nis
 router.post("/send-notification", validateToken, async (req, res) => {
     // Body
-    const { tokens, title, body } = req.body;
+    const { tokens, title, body, data } = req.body; // Tambahkan data di destructuring
 
-    // Check apakah body tokens adalah sebuah Array atau kosong?
+    // Validasi
     if (!Array.isArray(tokens) || tokens.length === 0) {
-        return res
-            .status(400)
-            .json({ message: "tokens must be a non-empty array" });
+        return res.status(400).json({
+            status: "error",
+            message: "tokens must be a non-empty array",
+        });
+    }
+
+    if (!title || !body) {
+        return res.status(400).json({
+            status: "error",
+            message: "title and body are required",
+        });
     }
 
     try {
         const message = {
-            tokens, // Array token FCM
+            tokens,
             notification: { title, body },
-            data: data || {}, // Data tambahan (opsional)
+            data: data || {}, // Gunakan data jika ada, default empty object
         };
 
-        const response = await admin.messaging().send(message);
+        // Gunakan sendMulticast untuk multiple devices
+        const response = await admin.messaging().sendMulticast(message);
 
-        // Format response FCM
+        // Format response
         const result = {
             successCount: response.successCount,
             failureCount: response.failureCount,
@@ -41,12 +50,17 @@ router.post("/send-notification", validateToken, async (req, res) => {
         res.json({
             status: "success",
             fcmResponse: result,
+            messageId: response.responses[0]?.messageId, // Ambil messageId pertama
         });
     } catch (error) {
         console.error("FCM Error:", error);
         res.status(500).json({
             status: "error",
             error: error.message || "Failed to send notification",
+            stack:
+                process.env.NODE_ENV === "development"
+                    ? error.stack
+                    : undefined,
         });
     }
 });
