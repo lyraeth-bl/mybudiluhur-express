@@ -33,7 +33,7 @@ router.post("/send-notification", validateToken, async (req, res) => {
         };
 
         // Gunakan sendMulticast untuk multiple devices
-        const response = await admin.messaging().sendMulticast(message);
+        const response = await admin.messaging().sendEachForMulticast(message);
 
         // Format response
         const result = {
