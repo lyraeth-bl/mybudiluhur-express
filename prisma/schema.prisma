@@ -1,0 +1,56 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+    provider = "prisma-client-js"
+    output   = "../generated/prisma"
+}
+
+datasource db {
+    provider = "mysql"
+    url      = env("DATABASE_URL")
+}
+
+model Device_tokens {
+    id             String    @id @unique @default(cuid())
+    nis            String
+    token          String?
+    platform       String?
+    app_version    String?
+    last_active_at DateTime?
+    created_at     DateTime  @default(now())
+    updated_at     DateTime  @updatedAt
+
+    @@index([nis])
+    @@index([token])
+    @@index([platform])
+    @@index([app_version])
+}
+
+model Notifications {
+    id             String   @id @unique @default(cuid())
+    type           String
+    title          String
+    body           String
+    image_url      String?
+    data_payload   Json
+    target_type    String
+    target_value   String
+    nis            String
+    status         String
+    fmc_message_id String
+    error_message  String
+    sent_at        DateTime @default(now())
+    created_at     DateTime @default(now())
+    updated_at     DateTime @updatedAt
+
+    @@index([type])
+    @@index([title])
+    @@index([body])
+    @@index([nis])
+    @@index([status])
+    @@index([error_message])
+}
