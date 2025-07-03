@@ -8,13 +8,13 @@ router.get("/", (req, res) => res.send("Notifications"));
 // Post notifications for multi nis
 router.post("/send-notification", validateToken, async (req, res) => {
     // Body
-    const { title, body, data, targetNis } = req.body;
+    const { tokens, title, body } = req.body;
 
-    // Check apakah body targetNis adalah sebuah Array atau kosong?
-    if (!Array.isArray(targetNis) || targetNis.length === 0) {
+    // Check apakah body tokens adalah sebuah Array atau kosong?
+    if (!Array.isArray(tokens) || tokens.length === 0) {
         return res
             .status(400)
-            .json({ message: "targetNis must be a non-empty array" });
+            .json({ message: "tokens must be a non-empty array" });
     }
 
     try {
